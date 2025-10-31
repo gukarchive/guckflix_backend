@@ -1,0 +1,37 @@
+server:
+  port: 8081
+
+spring:
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/test
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        # show_sql: true
+        # format_sql: true
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope:
+              - email
+              - profile
+  # 스웨거 Spring boot 2.6.2버전 이후 sping.mvc.pathmatch.matching-strategy의 값이
+  # ant_path_matcher -> path_pattern_parser로 변경되어 오류 발생 가능함
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  messages:
+    basename: errors
+logging.level:
+  root: info
+  # org.hibernate.SQL: debug
+  # org.hibernate.type: trace
