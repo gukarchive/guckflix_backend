@@ -1,0 +1,56 @@
+server:
+  port: 8081
+  servlet:
+    session:
+      timeout: 1800
+      # 기본 단위는 초이고, 단위가 '60'초이기 때문에 130처럼 2분 10초로 설정하는 경우, session.getMaxInactiveInterval() = 120으로 절사되어 나옴.
+spring:
+  cache:
+    type: redis
+    redis : cache-null-values=true
+  datasource:
+    url: ${MYSQL_URL}
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  redis:
+    host: ${REDIS_HOST}
+    port: ${REDIS_PORT}
+    password: ${REDIS_PASSWORD}
+  jpa:
+    database: mysql
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        default_batch_fetch_size: 40
+        # 100으로 하면 limit=20인 쿼리가 12/8로 나뉘어서 나간다. 1~10, 12, 25, 50, 100중 12와 8로 처리하기 때문
+        # https://velog.io/@joonghyun/SpringBoot-JPA-JPA-Batch-Size%EC%97%90-%EB%8C%80%ED%95%9C-%EA%B3%A0%EC%B0%B0
+        # https://www.inflearn.com/community/questions/34469/default-batch-fetch-size-%EA%B4%80%EB%A0%A8%EC%A7%88%EB%AC%B8
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope:
+              - email
+              - profile
+# 스웨거 Spring boot 2.6.2버전 이후 sping.mvc.pathmatch.matching-strategy의 값이
+# ant_path_matcher -> path_pattern_parser로 변경되어 오류 발생 가능함
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  messages:
+    basename: errors
+logging.level:
+  root: info
+  org.springframework.data.redis: DEBUG
+  # org.hibernate.SQL: info
+  org.hibernate.type.descriptor.sql.BasicBinder: trace
+slack:
+  webhook:
+    url: ${SLACK_WEBHOOK_URL}

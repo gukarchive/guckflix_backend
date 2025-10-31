@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+
+    <!-- Appender : 로그 메세지를 출력할 대상을 결정 -->
+    <!-- ConsoleAppender : 콘솔에 출력하는 Appender -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoder 패턴 : 로그 출력 형태를 설정. 콘솔은 가독성을 위해 %green() 처럼 색상을 입힘 -->
+        <encoder>
+            <pattern>%green(%d{yyyy-MM-dd HH:mm:ss.SSS}) %magenta([%thread]) %highlight(%5level) [%X{request_id}] %cyan(%logger) - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- SizeAndTimeBasedRollingPolicy : 시간 설정, 용량 설정에 따라 파일을 나누어 작성하는 Appender -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!-- 로그를 저장할 파일 -->77
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 하루 동안의 log를 남김 -->
+            <fileNamePattern>${LOG_DIRECTORY}/logFile_%d{yyyy-MM-dd}_%i.log</fileNamePattern>
+            <maxHistory>30</maxHistory> <!-- 보관 기간 설정 -->
+            <maxFileSize>100MB</maxFileSize> <!-- 파일 당 저장용량 설정 -->
+            <totalSizeCap>3GB</totalSizeCap> <!-- 총 저장용량 설정 -->
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %5level %logger - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- WARN 레벨 로그를 저장할 Appender -->
+    <appender name="WARN_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIRECTORY}/warn_logs_%d{yyyy-MM-dd}_%i.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <maxFileSize>20MB</maxFileSize>
+            <totalSizeCap>600MB</totalSizeCap>
+        </rollingPolicy>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter"> <!-- WARN 레벨 이상의 로그만 파일에 기록 -->
+            <level>WARN</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %5level %logger - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- ERROR 레벨 로그를 저장할 Appender -->
+    <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_DIRECTORY}/error_logs_%d{yyyy-MM-dd}_%i.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <maxFileSize>20MB</maxFileSize>
+            <totalSizeCap>600MB</totalSizeCap>
+        </rollingPolicy>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter"> <!-- INFO 레벨 이상의 로그만 파일에 기록 -->
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %5level %logger - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <!-- logger : 실제 로깅을 수행하는 구성요소 -->
+    <!-- guckflix.backend 패키지의 경우 level 이상을 출력하도록 설정. root 레벨이 INFO일 때, 내 개발 패키지 레벨이 DEBUG이더라도 출력됨 -->
+    <!-- <logger name="guckflix.backend" level="DEBUG" /> -->
+
+    <!-- root level : 설정한 레벨 이상만 콘솔 또는 파일로 출력 -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+        <appender-ref ref="WARN_FILE" />
+        <appender-ref ref="ERROR_FILE" />
+    </root>
+
+</configuration>
