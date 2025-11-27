@@ -1,7 +1,9 @@
 
+**포트폴리오 국플릭스 웹사이트**
+- **https://gukarchive.github.io/**
+<br>
 
-**웹 포트폴리오 국플릭스 링크**
-- 프론트엔드 사이트 : https://gukarchive.github.io/
+**관련 링크**
 - [개발 흐름 및 학습 과정을 정리한 개인 노션](https://gukarchive1994.notion.site/1e8014017e4c4b8d82604d1dbbc47aea?v=086b8d29b8334e88b3bfe61a9b20084d)
 - 백엔드 깃허브 : https://github.com/gukarchive/guckflix_backend
 - 프론트엔드 깃허브 : https://github.com/gukarchive/guckflix_frontend
