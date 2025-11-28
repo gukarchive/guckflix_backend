@@ -29,7 +29,8 @@
 
 **프로젝트 주요 특징 및 적용점 포스팅**
 <br>
-이하 링크가 동작하지 않거나 느리다면 최상단의 노션 링크로 접속하시면 됩니다.
+아래는 노션 링크 또는 작성한 자바 파일 링크입니다.
+노션 링크로 글이 자동으로 열리지 않으면 새로고침 부탁드립니다.
 <br>
 
 - [304 응답코드를 활용한 이미지 캐싱](https://github.com/gukarchive/guckflix_backend/blob/master/src/main/java/guckflix/backend/controller/ImageController.java)
