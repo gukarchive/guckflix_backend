@@ -78,7 +78,7 @@
 - 메인 DB MYSQL 8
 - 테스트용 DB H2
 - 스프링 Data JPA (ORM)
-- Redis (인기 API 캐싱 목적)
+- 스프링 캐시 + Redis (자주 호출되는 API 캐싱)
 <br>
 
 3. 프론트엔드
