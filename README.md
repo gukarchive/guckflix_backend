@@ -59,7 +59,6 @@
 - [추상화, 다형성, 상속, 캡슐화](https://gukarchive1994.notion.site/1e8014017e4c4b8d82604d1dbbc47aea?v=086b8d29b8334e88b3bfe61a9b20084d&p=2b26248714fb8071a645c87cdb6d584b&pm=s)
 - [스프링 레거시 프로젝트(1) - JSP, 서블릿, JSTL, EL](https://gukarchive1994.notion.site/1e8014017e4c4b8d82604d1dbbc47aea?v=086b8d29b8334e88b3bfe61a9b20084d&p=2b46248714fb80e486c4c7db070c801b&pm=s)
 - [스프링 레거시 프로젝트(2) - web.xml, RootApplicationContext, WebApplicationContext](https://gukarchive1994.notion.site/1e8014017e4c4b8d82604d1dbbc47aea?v=086b8d29b8334e88b3bfe61a9b20084d&p=2b56248714fb80039e24f3aa1381f7e0&pm=s)
-- [스프링 레거시 프로젝트(3) - mybatis (작성중)](https://gukarchive1994.notion.site/1e8014017e4c4b8d82604d1dbbc47aea?v=086b8d29b8334e88b3bfe61a9b20084d&p=2b66248714fb80579dd1d6f49208b139&pm=s)
 - [컬렉션 프레임워크, Iterator, ConcurrentModificationException, Comparator](https://gukarchive1994.notion.site/1e8014017e4c4b8d82604d1dbbc47aea?v=086b8d29b8334e88b3bfe61a9b20084d&p=3ae715430a0f4967893cf120a3cade21&pm=s)
 - [Enum](https://gukarchive1994.notion.site/1e8014017e4c4b8d82604d1dbbc47aea?v=086b8d29b8334e88b3bfe61a9b20084d&p=0ae5c46d5af7449e8f8f7eab39682d09&pm=s)
 - [static](https://gukarchive1994.notion.site/1e8014017e4c4b8d82604d1dbbc47aea?v=086b8d29b8334e88b3bfe61a9b20084d&p=7f876f82272940a6b31cdc2639a88fcb&pm=s)
