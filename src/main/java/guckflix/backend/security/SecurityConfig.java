@@ -11,8 +11,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizationRequestResolver;
-import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter;
-import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestResolver;
 import org.springframework.security.web.*;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -64,9 +62,8 @@ public class SecurityConfig {
         http.oauth2Login()
                 .authorizationEndpoint()
                 .baseUri("/oauth2/authorization/**")
-                .authorizationRequestResolver(customOAuth2AuthorizationRequestResolver(clientRegistrationRepository))
                 .and()
-                .successHandler(authenticationSuccessHandler)
+                .defaultSuccessUrl(System.getenv("URL_DEFAULT")+"/auth/callback")
                 .failureHandler(authenticationFailureHandler)
                 .userInfoEndpoint()
                 .userService(oauth2UserService);// 구글 로그인 완료 처리할 서비스
@@ -82,12 +79,6 @@ public class SecurityConfig {
                 .maximumSessions(1) // 동시 세션 허용 수
                 .maxSessionsPreventsLogin(false); // 동시 로그인 방지 설정 안 함. 후 사용자가 로그인 하면 선 사용자는 만료
         return http.build();
-    }
-
-    @Bean
-    public CustomOAuth2AuthorizationRequestResolver customOAuth2AuthorizationRequestResolver(
-            ClientRegistrationRepository clientRegistrationRepository) {
-        return new CustomOAuth2AuthorizationRequestResolver(defaultOAuth2AuthorizationRequestResolver(clientRegistrationRepository));
     }
 
     @Bean
