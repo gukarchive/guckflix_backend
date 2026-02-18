@@ -1,8 +1,6 @@
 package guckflix.backend.controller;
 
 import guckflix.backend.exception.NotFoundException;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -12,7 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -22,7 +20,6 @@ import static org.springframework.http.MediaType.IMAGE_JPEG;
 
 @RestController
 @Slf4j
-@Api(tags = {"이미지 API"})
 @RequiredArgsConstructor
 public class ImageController {
 
@@ -31,9 +28,8 @@ public class ImageController {
      * ETag로 브라우저 캐시 사용 유도
      */
     @GetMapping(value = "/images/{imageCategory}/{file}")
-    @ApiOperation(value = "이미지 조회", notes = "파일 명과 요청 종류에 따라 이미지를 보여준다.")
-    public ResponseEntity<Resource> imageVideo(@PathVariable String file,
-                                               @PathVariable String imageCategory, HttpServletRequest req) throws IOException {
+    public ResponseEntity<Resource> imageVideo(@PathVariable("file") String file,
+                                               @PathVariable("imageCategory") String imageCategory, HttpServletRequest req) throws IOException {
         Resource resource = null;
         if(imageCategory.equals(DIRECTORY_W500)){
             resource = new UrlResource("file", IMAGE_DIRECTORY_ROOT +"/"+ DIRECTORY_W500 +"/"+file);
@@ -53,7 +49,7 @@ public class ImageController {
 
         // 최초 요청이거나 바뀐 것이 있으면 etag와 함께 200 응답
         return ResponseEntity.ok().contentType(IMAGE_JPEG)
-                .cacheControl(CacheControl.noCache()) // no-Cache:캐시는 저장하지만 사용할 때마다 서버에 재검증
+                .cacheControl(CacheControl.noCache()) // no-Cache:癲????????濚왿몾??壤?癲??????????????筌먦끉裕?????癲?
                 .eTag(generateETag(resource))
                 .body(resource);
     }
@@ -65,8 +61,8 @@ public class ImageController {
      */
     private String generateETag(Resource resource){
         try {
-            long contentLength = resource.contentLength(); // 리소스 길이
-            long lastModified = resource.lastModified(); // 리소스 마지막 수정일
+            long contentLength = resource.contentLength(); // ?域밸Ŧ遊양댆????ヂ?筌??
+            long lastModified = resource.lastModified(); // ?域밸Ŧ遊양댆??癲ル슢???癲????쒓낯???
             String fileName = resource.getFilename();
             return "\"" +contentLength+lastModified+fileName+"\"";
         } catch (FileNotFoundException e) {

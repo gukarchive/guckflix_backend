@@ -11,8 +11,7 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
@@ -30,7 +29,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
     @Override
     @Transactional
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        log.info("getClientRegistration: " + userRequest.getClientRegistration()); // registrationId로 어떤 Oauth로 로그인할지 설정
+        log.info("getClientRegistration: " + userRequest.getClientRegistration()); // registrationId嚥???堉?Oauth嚥?嚥≪뮄??紐낅막筌왖 ??쇱젟
         log.info("getAccessToken: " + userRequest.getAccessToken().getTokenValue());
 
         // 구글 로그인 성공 시 oauth-client 라이브러리가 code를 리턴받음 -> accessToken 요청

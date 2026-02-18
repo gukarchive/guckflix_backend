@@ -3,11 +3,11 @@ package guckflix.backend.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import guckflix.backend.entity.Actor;
 import guckflix.backend.entity.Credit;
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ public class ActorDto {
     @Getter
     @Setter
     @NoArgsConstructor
-    @ApiModel(value = "ActorDto-Post")
+    @Schema(name = "ActorDto-Post")
     public static class Post {
 
         @NotBlank
@@ -45,7 +45,7 @@ public class ActorDto {
         @Getter
         @Setter
         @AllArgsConstructor
-        @ApiModel(value = "ActorDto-ActorPostCredit")
+        @Schema(name = "ActorDto-ActorPostCredit")
         public static class ActorPostCredit {
 
             @NotBlank
@@ -63,7 +63,7 @@ public class ActorDto {
     @Setter
     @NoArgsConstructor
     @ToString
-    @ApiModel(value = "ActorDto-Response")
+    @Schema(name = "ActorDto-Response")
     public static class Response {
 
         private Long id;
@@ -106,7 +106,7 @@ public class ActorDto {
         @Setter
         @NoArgsConstructor
         @ToString
-        @ApiModel(value = "ActorDto-CreditWithMovieInfo")
+        @Schema(name = "ActorDto-CreditWithMovieInfo")
         public static class CreditWithMovieInfo {
 
             @JsonProperty("credit_id")
@@ -145,7 +145,7 @@ public class ActorDto {
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
-    @ApiModel(value = "ActorDto-UpdateInfo")
+    @Schema(name = "ActorDto-UpdateInfo")
     public static class UpdateInfo {
 
         private String name;

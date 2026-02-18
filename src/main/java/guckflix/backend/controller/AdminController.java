@@ -1,10 +1,8 @@
 package guckflix.backend.controller;
 
 import guckflix.backend.dto.AdminMemoDto;
-import guckflix.backend.file.FileConst;
 import guckflix.backend.service.AdminService;
 import guckflix.backend.service.MemberService;
-import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -16,7 +14,6 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 @Slf4j
-@Api(tags = {"관리자 API"})
 @RestController
 @RequestMapping("/admin")
 @RequiredArgsConstructor
@@ -32,7 +29,6 @@ public class AdminController {
 //        }
 //        //String savedUsername = memberService.save(form);
 //        return ResponseEntity.ok("ok");
-//    }
 
     private final AdminService adminService;
 
@@ -54,7 +50,7 @@ public class AdminController {
     }
 
     @DeleteMapping("/memos/{id}")
-    public ResponseEntity deleteMemo(@PathVariable Long id){
+    public ResponseEntity deleteMemo(@PathVariable("id") Long id){
         adminService.deleteMemo(id);
         return ResponseEntity.ok(null);
     }

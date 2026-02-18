@@ -14,8 +14,7 @@ import guckflix.backend.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -50,7 +49,7 @@ public class MovieService {
         return PagingFactory.newPaging(similar, dtos);
     }
 
-    @Cacheable(cacheManager = "cacheManager", key = "#pagingRequest.requestPage", value="popular")
+    @Cacheable(cacheManager = "cacheManager", value="popular", key = "#p0.requestPage")
     public Paging<Response> findPopular(PagingRequest pagingRequest) {
         Paging<Movie> popular = movieRepository.findPopular(pagingRequest);
         List<Response> dtos = popular.getList().stream()
@@ -188,7 +187,7 @@ public class MovieService {
 
         // Credit 수정
         for (Credit credit : credits){
-            movie.updateCredit(credit); // Movie <-> Credit 양방향 연관관계 설정
+            movie.updateCredit(credit); // Movie <-> Credit ?臾먭컩???怨??온????쇱젟
         }
     }
 

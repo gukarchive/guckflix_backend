@@ -18,8 +18,6 @@ import guckflix.backend.service.CreditService;
 import guckflix.backend.service.MovieService;
 import guckflix.backend.service.ReviewService;
 import guckflix.backend.service.VideoService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -27,17 +25,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import springfox.documentation.annotations.Cacheable;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
-@Api(tags = {"영화 API"})
 @RestController
 @RequiredArgsConstructor
 public class MovieController {
@@ -50,7 +46,6 @@ public class MovieController {
     private final FileUploader fileUploader;
 
     @GetMapping("/movies")
-    @ApiOperation(value = "관리자 페이지 쿼리용", notes = "PagingRequest의 검색 키워드, 정렬 기준, 정렬 방향으로 영화 조회")
     public ResponseEntity<Paging> getMovies(PagingRequest pagingRequest) {
         Paging<MovieDto.Response> paging = movieService.searchAndSort(pagingRequest);
         return ResponseEntity.ok(paging);
@@ -60,7 +55,6 @@ public class MovieController {
      * popularity 기준 페이징
      */
         @GetMapping("/movies/popular")
-    @ApiOperation(value = "인기 영화 리스트", notes = "PagingRequest로 인기 영화 조회")
     public ResponseEntity<Paging> popular(PagingRequest pagingRequest) {
         Paging<MovieDto.Response> popular = movieService.findPopular(pagingRequest);
         return ResponseEntity.ok(popular);
@@ -72,7 +66,6 @@ public class MovieController {
      * 투표 가중치 : guckflix.backend.config.QueryWeight
      */
     @GetMapping("/movies/top-rated")
-    @ApiOperation(value = "명작 영화 리스트", notes = "PagingRequest로 평점이 높은 영화 조회")
     public ResponseEntity<Paging> topRated(PagingRequest pagingRequest) {
         Paging<MovieDto.Response> topRated = movieService.findTopRated(pagingRequest);
         return ResponseEntity.ok(topRated);
@@ -82,8 +75,7 @@ public class MovieController {
      * 영화 상세 보기
      */
     @GetMapping("/movies/{movieId}")
-    @ApiOperation(value = "영화 상세", notes = "ID로 영화 상세 조회")
-    public ResponseEntity<MovieDto.Response> detail(@PathVariable Long movieId) {
+    public ResponseEntity<MovieDto.Response> detail(@PathVariable("movieId") Long movieId) {
         MovieDto.Response findMovie = movieService.findById(movieId);
         return ResponseEntity.ok(findMovie);
     }
@@ -92,8 +84,7 @@ public class MovieController {
      * 유사한 영화 보기
      */
     @GetMapping("/movies/{movieId}/similar")
-    @ApiOperation(value = "유사 영화 리스트", notes = "ID로 영화 상세를 조회한 뒤, PagingRequest로 유사 영화 조회")
-    public ResponseEntity<Paging> similar(@PathVariable Long movieId,
+    public ResponseEntity<Paging> similar(@PathVariable("movieId") Long movieId,
                                           PagingRequest pagingRequest) {
         Paging<MovieDto.Response> similar = movieService.findSimilar(movieId, pagingRequest);
         return ResponseEntity.ok(similar);
@@ -103,8 +94,7 @@ public class MovieController {
      * 영화 크레딧(배역, 배우) 보기
      */
     @GetMapping("/movies/{movieId}/credits")
-    @ApiOperation(value = "영화 크레딧 리스트", notes = "ID로 영화 상세를 조회한 뒤, 영화 크레딧과 배우 조회")
-    public ResponseEntity<ResponseWrapper> credits(@PathVariable Long movieId) {
+    public ResponseEntity<ResponseWrapper> credits(@PathVariable("movieId") Long movieId) {
         List<CreditDto.Response> credit = creditService.findActors(movieId);
         return ResponseEntity.ok(ResponseWrapper.withMovieId(movieId, credit));
     }
@@ -114,9 +104,8 @@ public class MovieController {
      * accept-language : ko or en
      */
     @GetMapping("/movies/{movieId}/videos")
-    @ApiOperation(value = "영상물 조회", notes = "ID로 영화 상세를 조회하고, Locale에 따라 언어별 영상 조회")
-    public ResponseEntity<ResponseWrapper> videos(@PathVariable Long movieId,
-                                                       Locale locale) {
+    public ResponseEntity<ResponseWrapper> videos(@PathVariable("movieId") Long movieId,
+                                                        Locale locale) {
         List<VideoDto.Response> result = videoService.findById(movieId, locale.getLanguage());
         return ResponseEntity.ok(ResponseWrapper.withMovieId(movieId, result));
     }
@@ -125,8 +114,7 @@ public class MovieController {
      * 리뷰 조회
      */
     @GetMapping("/movies/{movieId}/reviews")
-    @ApiOperation(value = "리뷰 조회", notes = "ID로 영화 상세를 조회하고, PagingRequest에 따라 리뷰 조회")
-    public ResponseEntity<Paging> reviews(@PathVariable Long movieId, PagingRequest pagingRequest) {
+    public ResponseEntity<Paging> reviews(@PathVariable("movieId") Long movieId, PagingRequest pagingRequest) {
         Paging<Response> reviews = reviewService.findAllById(movieId, pagingRequest);
         return ResponseEntity.ok().body(reviews);
     }
@@ -135,8 +123,7 @@ public class MovieController {
      * 리뷰 작성
      */
     @PostMapping("/movies/{movieId}/reviews")
-    @ApiOperation(value = "리뷰 작성", notes = "ID로 영화를 조회하고, 회원일 때 제출된 데이터로 리뷰 작성")
-    public ResponseEntity<Response> reviewsPost(@PathVariable Long movieId,
+    public ResponseEntity<Response> reviewsPost(@PathVariable("movieId") Long movieId,
                                                 @AuthenticationPrincipal PrincipalDetails user,
                                                 @ModelAttribute Post dto) {
         dto.setMovieId(movieId);
@@ -146,10 +133,9 @@ public class MovieController {
     }
 
     @DeleteMapping("/movies/{movieId}/reviews/{reviewId}")
-    @ApiOperation(value = "리뷰 삭제", notes = "ID로 영화를 조회하고, 회원일 때 제출된 데이터로 리뷰 삭제")
-    public ResponseEntity<String> reviewsDelete(@PathVariable Long movieId,
+    public ResponseEntity<String> reviewsDelete(@PathVariable("movieId") Long movieId,
                                                 @AuthenticationPrincipal PrincipalDetails user,
-                                                @PathVariable Long reviewId) {
+                                                @PathVariable("reviewId") Long reviewId) {
         reviewService.delete(reviewId, movieId, user.getMember().getId());
         return ResponseEntity.ok().body("DELETED");
     }
@@ -158,8 +144,7 @@ public class MovieController {
      * 영화 검색
      */
     @GetMapping("/movies/search")
-    @ApiOperation(value = "영화 검색", notes = "키워드로 영화 조회")
-    public ResponseEntity<Slice> search(@RequestParam String keyword, PagingRequest pagingRequest) {
+    public ResponseEntity<Slice> search(@RequestParam("keyword") String keyword, PagingRequest pagingRequest) {
         Slice<MovieDto.Response> movies = movieService.findByKeyword(keyword, pagingRequest);
         return ResponseEntity.ok().body(movies);
     }
@@ -168,7 +153,6 @@ public class MovieController {
     /**
      * 영화 등록
      */
-    @ApiOperation(value = "영화 등록", notes = "영화 프로필 등록")
     @PostMapping(value = "/movies")
     public ResponseEntity post(@Valid @RequestPart MovieDto.Post form,
                                @RequestPart MultipartFile originFile,
@@ -200,9 +184,8 @@ public class MovieController {
      * 영화 수정
      */
     @PatchMapping("/movies/{movieId}")
-    @ApiOperation(value = "영화 수정", notes = "영화 프로필과 크레딧을 변경")
     public ResponseEntity update(
-                                @PathVariable Long movieId,
+                                @PathVariable("movieId") Long movieId,
                                 @RequestPart(required = false) MultipartFile w500File,
                                 @RequestPart(required = false) MultipartFile originFile,
                                 @Valid @RequestPart MovieDto.Update movieUpdateForm){
@@ -247,8 +230,7 @@ public class MovieController {
      * 영화 삭제
      */
     @DeleteMapping("/movies/{movieId}") 
-    @ApiOperation(value = "영화 삭제", notes = "영화를 삭제하고 크레딧도 함께 삭제")
-    public ResponseEntity delete(@PathVariable Long movieId){
+    public ResponseEntity delete(@PathVariable("movieId") Long movieId){
         MovieDto.Response dto = movieService.findById(movieId);
         movieService.delete(movieId);
         fileUploader.delete(FileConst.DIRECTORY_ORIGINAL, dto.getBackdropPath());
@@ -261,8 +243,7 @@ public class MovieController {
      * 영화 크레딧 추가
      */
     @PostMapping("/movies/{movieId}/credits")
-    @ApiOperation(value = "영화 크레딧 추가", notes = "영화 크레딧 추가")
-    public ResponseEntity addCredit(@PathVariable Long movieId,
+    public ResponseEntity addCredit(@PathVariable("movieId") Long movieId,
                                     @RequestBody CreditDto.Post form) throws URISyntaxException {
 
         ActorDto.Response.CreditWithMovieInfo response = creditService.addCredit(movieId, form);
@@ -273,8 +254,7 @@ public class MovieController {
      * 영화 크레딧 수정
      */
     @PatchMapping("/movies/{movieId}/credits/{creditId}")
-    @ApiOperation(value = "영화 크레딧 수정", notes = "영화 크레딧 수정")
-    public ResponseEntity patchCredit(@PathVariable Long movieId, @PathVariable Long creditId,
+    public ResponseEntity patchCredit(@PathVariable("movieId") Long movieId, @PathVariable("creditId") Long creditId,
                                       @RequestBody CreditDto.Patch creditPatchForm) {
 
         creditService.updateCredit(movieId, creditId, creditPatchForm);
@@ -285,9 +265,8 @@ public class MovieController {
      * 영화 크레딧 삭제
      */
     @DeleteMapping("/movies/{movieId}/credits/{creditId}")
-    @ApiOperation(value = "영화 크레딧 삭제", notes = "영화 크레딧 삭제")
-    public ResponseEntity deleteCredit(@PathVariable Long movieId,
-                                       @PathVariable Long creditId){
+    public ResponseEntity deleteCredit(@PathVariable("movieId") Long movieId,
+                                       @PathVariable("creditId") Long creditId){
         creditService.deleteCredit(movieId, creditId); ;
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
@@ -296,7 +275,6 @@ public class MovieController {
      * 영화 장르 조회
      */
     @GetMapping("/genres")
-    @ApiOperation(value = "영화 장르 조회", notes = "어플리케이션에 캐시된 영화 장르 조회")
     public ResponseEntity getGenres(){
         return ResponseEntity.ok().body(GenreCached.getGenresByDtos());
     }

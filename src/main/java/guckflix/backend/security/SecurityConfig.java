@@ -8,20 +8,21 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizationRequestResolver;
-import org.springframework.security.web.*;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.session.SessionInformationExpiredStrategy;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 
 @Configuration
 @RequiredArgsConstructor
@@ -35,49 +36,51 @@ public class SecurityConfig {
     private final LogoutSuccessHandler logoutSuccessHandler;
     private final ClientRegistrationRepository clientRegistrationRepository;
 
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.addFilter(corsFilter());
-        http.csrf()
-                .disable();
-        http.authorizeRequests()
-                .antMatchers(HttpMethod.POST,"/movies/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.PATCH,"/movies/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.DELETE,"/movies/**").hasRole("ADMIN")
 
-                .antMatchers(HttpMethod.POST,"/actors/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.PATCH,"/actors/**").hasRole("ADMIN")
-                .antMatchers(HttpMethod.DELETE,"/actors/**").hasRole("ADMIN")
+        http.csrf(AbstractHttpConfigurer::disable);
 
-                .anyRequest().permitAll();
-        http.httpBasic()
-                .disable();
-        http.formLogin()
+        http.authorizeHttpRequests(auth -> auth
+                .requestMatchers(HttpMethod.POST, "/movies/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PATCH, "/movies/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/movies/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.POST, "/actors/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PATCH, "/actors/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/actors/**").hasRole("ADMIN")
+                .anyRequest().permitAll());
+
+        http.httpBasic(AbstractHttpConfigurer::disable);
+
+        http.formLogin(form -> form
                 .loginProcessingUrl("/members/login")
                 .usernameParameter("username")
                 .passwordParameter("password")
                 .successHandler(authenticationSuccessHandler)
-                .failureHandler(authenticationFailureHandler);
-        http.oauth2Login()
-                .authorizationEndpoint()
-                .baseUri("/oauth2/authorization/**")
-                .and()
-                .defaultSuccessUrl(System.getenv("URL_DEFAULT")+"/auth/callback")
+                .failureHandler(authenticationFailureHandler));
+
+        http.oauth2Login(oauth2 -> oauth2
+                .authorizationEndpoint(authorization -> authorization.baseUri("/oauth2/authorization/**"))
+                .defaultSuccessUrl(System.getenv("URL_DEFAULT") + "/auth/callback")
                 .failureHandler(authenticationFailureHandler)
-                .userInfoEndpoint()
-                .userService(oauth2UserService);// 구글 로그인 완료 처리할 서비스
-        http.logout()
+                .userInfoEndpoint(userInfo -> userInfo.userService(oauth2UserService)));
+
+        http.logout(logout -> logout
                 .logoutUrl("/members/logout")
                 .logoutSuccessHandler(logoutSuccessHandler)
-                .deleteCookies("JSESSIONID");
-        http.exceptionHandling()
+                .deleteCookies("JSESSIONID"));
+
+        http.exceptionHandling(exception -> exception
                 .authenticationEntryPoint(authenticationEntryPoint)
-                .accessDeniedHandler(accessDeniedHandler);
-        http.sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // IF_REQUIRED : 스프링 시큐리티가 필요한 경우에 발급
-                .maximumSessions(1) // 동시 세션 허용 수
-                .maxSessionsPreventsLogin(false); // 동시 로그인 방지 설정 안 함. 후 사용자가 로그인 하면 선 사용자는 만료
+                .accessDeniedHandler(accessDeniedHandler));
+
+        http.sessionManagement(session -> session
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                .maximumSessions(1)
+                .maxSessionsPreventsLogin(false)
+                .expiredSessionStrategy(sessionInformationExpiredStrategy()));
+
         return http.build();
     }
 
@@ -87,9 +90,6 @@ public class SecurityConfig {
         return new DefaultOAuth2AuthorizationRequestResolver(clientRegistrationRepository, "/oauth2/authorization");
     }
 
-    /**
-     * 세션 만료 동작
-     */
     @Bean
     public SessionInformationExpiredStrategy sessionInformationExpiredStrategy() {
         return new ApiSessionInformationExpiredStrategy();
@@ -120,19 +120,16 @@ public class SecurityConfig {
         return new ApiAuthenticationSuccessHandler();
     }
 
-    /**
-     * CORS 필터
-     */
     @Bean
-    public CorsFilter corsFilter(){
+    public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true); // 내 서버가 응답 시 자격인증을 받아들일 지 설정
+        config.setAllowCredentials(true);
         config.addAllowedOrigin(System.getenv("URL_DEFAULT"));
-        config.addAllowedMethod("*"); // 모든 메서드 허용
+        config.addAllowedMethod("*");
         config.addAllowedHeader("*");
         config.addExposedHeader("location");
-        source.registerCorsConfiguration("/**", config); // 전체에 cors 필터 설정
+        source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
 
@@ -144,5 +141,4 @@ public class SecurityConfig {
         registrationBean.setOrder(1);
         return registrationBean;
     }
-
 }

@@ -1,15 +1,14 @@
 package guckflix.backend.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 
 @Getter
 @Setter
@@ -20,7 +19,7 @@ public class MemberDto {
     @Getter
     @Setter
     @ToString
-    @ApiModel(value = "MemberDto-Post")
+    @Schema(name = "MemberDto-Post")
     public static class Post{
 
         @Pattern (regexp = "^(?=.*[A-Za-z])[A-Za-z0-9]{4,20}$", message = "아이디 : 영문을 포함한 4 ~ 20자")
@@ -38,7 +37,7 @@ public class MemberDto {
     @Getter
     @Setter
     @ToString
-    @ApiModel(value = "MemberDto-LoginForm")
+    @Schema(name = "MemberDto-LoginForm")
     public static class LoginForm {
 
         @NotBlank
@@ -54,7 +53,7 @@ public class MemberDto {
     @Getter
     @Setter
     @ToString
-    @ApiModel(value = "MemberDto-PasswordChangeForm")
+    @Schema(name = "MemberDto-PasswordChangeForm")
     public static class passwordChangeForm {
 
         @NotBlank
@@ -65,7 +64,7 @@ public class MemberDto {
 
     @Getter
     @Setter
-    @ApiModel(value = "MemberDto-User")
+    @Schema(name = "MemberDto-User")
     public static class User{
         private Long id;
         private String role;

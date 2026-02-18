@@ -3,12 +3,12 @@ package guckflix.backend.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import guckflix.backend.entity.Review;
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
 public class ReviewDto {
@@ -16,7 +16,7 @@ public class ReviewDto {
     @Getter
     @Setter
     @NoArgsConstructor
-    @ApiModel(value = "ReviewDto-Post")
+    @Schema(name = "ReviewDto-Post")
     public static class Post {
 
         @NotBlank
@@ -40,7 +40,7 @@ public class ReviewDto {
     @Getter
     @Setter
     @NoArgsConstructor
-    @ApiModel(value = "ReviewDto-Response")
+    @Schema(name = "ReviewDto-Response")
     public static class Response implements DataTransferable{
 
         @JsonProperty("review_id")

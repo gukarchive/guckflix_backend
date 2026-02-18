@@ -4,7 +4,7 @@ package guckflix.backend.entity;
 import guckflix.backend.entity.enums.MemberRole;
 import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

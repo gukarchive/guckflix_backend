@@ -3,21 +3,17 @@ package guckflix.backend.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import guckflix.backend.annotation.DateRange;
-import guckflix.backend.config.GenreCached;
 import guckflix.backend.entity.Movie;
 import guckflix.backend.entity.MovieGenre;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.Valid;
-import javax.validation.constraints.*;
-import java.io.Serializable;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -27,7 +23,7 @@ public class MovieDto {
     @Getter
     @Setter
     @NoArgsConstructor
-    @ApiModel(value = "MovieDto-Post")
+    @Schema(name = "MovieDto-Post")
     public static class Post implements DataTransferable {
 
         @NotBlank
@@ -65,7 +61,7 @@ public class MovieDto {
     @Getter
     @Setter
     @NoArgsConstructor
-    @ApiModel(value = "MovieDto-Response")
+    @Schema(name = "MovieDto-Response")
     public static class Response implements DataTransferable {
 
         private Long id;
@@ -120,7 +116,7 @@ public class MovieDto {
     @Getter
     @Setter
     @NoArgsConstructor
-    @ApiModel(value = "MovieDto-Update")
+    @Schema(name = "MovieDto-Update")
     public static class Update implements DataTransferable {
 
         @NotBlank

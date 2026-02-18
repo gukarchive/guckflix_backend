@@ -7,7 +7,7 @@ import guckflix.backend.entity.enums.VideoProvider;
 import guckflix.backend.entity.enums.VideoType;
 import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity

@@ -3,7 +3,7 @@ package guckflix.backend.entity;
 import guckflix.backend.dto.ActorDto;
 import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,4 +51,3 @@ public class Actor {
 
 
 }
-

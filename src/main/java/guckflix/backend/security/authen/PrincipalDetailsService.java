@@ -36,4 +36,3 @@ public class PrincipalDetailsService implements UserDetailsService {
         throw new UsernameNotFoundException("user not found");
     }
 }
-

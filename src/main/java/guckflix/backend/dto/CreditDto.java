@@ -2,23 +2,23 @@ package guckflix.backend.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import guckflix.backend.entity.Credit;
-import io.swagger.annotations.ApiModel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
 
 public class CreditDto {
 
     @Getter
     @Setter
-    @ApiModel(value = "CreditDto-Response")
+    @Schema(name = "CreditDto-Response")
     public static class Response{
 
         @JsonProperty("actor_id")
@@ -49,7 +49,7 @@ public class CreditDto {
 
     @Getter
     @Setter
-    @ApiModel(value = "CreditDto-Post")
+    @Schema(name = "CreditDto-Post")
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Post {
@@ -67,7 +67,7 @@ public class CreditDto {
 
     @Getter
     @Setter
-    @ApiModel(value = "CreditDto-Delete")
+    @Schema(name = "CreditDto-Delete")
     public static class Delete {
 
         @JsonProperty("credit_id")
@@ -77,7 +77,7 @@ public class CreditDto {
 
     @Getter
     @Setter
-    @ApiModel(value = "CreditDto-Patch")
+    @Schema(name = "CreditDto-Patch")
     public static class Patch {
 
         @JsonProperty("character")

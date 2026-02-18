@@ -7,10 +7,8 @@ import guckflix.backend.repository.GenreRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  *

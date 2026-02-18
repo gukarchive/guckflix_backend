@@ -6,8 +6,7 @@ import guckflix.backend.repository.AdminMemoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;

@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -57,6 +57,7 @@ public class SessionController {
                 // 이용자가 전송한 JSESSIONID가 세션 값과 일치하는 경우
                 if (jsessionIdFromCookie.equals(session.getId())) {
                     return ResponseEntity.ok().body(new ResponseDto(HttpStatus.OK.value(), HttpStatus.OK, "유효 세션 성공", new MemberDto.User(userId, role)));
+
                 }
             }
         }

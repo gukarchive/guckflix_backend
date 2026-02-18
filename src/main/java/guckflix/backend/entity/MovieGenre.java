@@ -2,9 +2,7 @@ package guckflix.backend.entity;
 
 import lombok.*;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.persistence.*;
 
 @Table(name = "movie_genre")
 @Entity

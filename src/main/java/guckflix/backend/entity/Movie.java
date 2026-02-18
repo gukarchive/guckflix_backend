@@ -3,7 +3,7 @@ package guckflix.backend.entity;
 import guckflix.backend.dto.MovieDto;
 import lombok.*;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
