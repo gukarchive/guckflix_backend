@@ -64,7 +64,7 @@ class AiChatServiceTest {
         when(chatModel.call(any(Prompt.class))).thenReturn(mockChatResponse(json));
 
         AiDto.ChatRequest request = new AiDto.ChatRequest();
-        request.setMessage("라라랜드 같은 영화 추천해줘");
+        request.setMessage("?�라?�드 같�? ?�화 추천?�줘");
 
         // when
         AiDto.SearchCondition condition = aiChatService.analyze(request);
@@ -86,7 +86,7 @@ class AiChatServiceTest {
         when(chatModel.call(any(Prompt.class))).thenReturn(mockChatResponse("true"));
 
         AiDto.ChatRequest request = new AiDto.ChatRequest();
-        request.setMessage("라라랜드 같은 영화 추천해줘");
+        request.setMessage("?�라?�드 같�? ?�화 추천?�줘");
 
         // when
         AiDto.SearchCondition condition = aiChatService.analyze(request);
@@ -110,3 +110,4 @@ class AiChatServiceTest {
         return new ChatResponse(List.of(generation));
     }
 }
+

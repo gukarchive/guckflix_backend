@@ -8,6 +8,7 @@ import guckflix.backend.entity.Movie;
 import guckflix.backend.entity.MovieGenre;
 import guckflix.backend.repository.MovieRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.messages.SystemMessage;
 import org.springframework.ai.chat.messages.UserMessage;
 import org.springframework.ai.chat.model.ChatModel;
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AiChatService {
 
     private static final int INDEX_PAGE_SIZE = 200;
@@ -88,6 +90,15 @@ public class AiChatService {
         }
 
         return totalIndexed;
+    }
+
+    public void deleteEmbeddedMovie(Long movieId) {
+        if (movieId == null || movieId <= 0) {
+            throw new IllegalArgumentException("movieId must be a positive number.");
+        }
+
+        vectorStore.delete("movieId == " + movieId);
+        log.debug("ai.embed.delete movieId={}", movieId);
     }
 
     /**
@@ -156,15 +167,42 @@ public class AiChatService {
      */
     public String ask(String message, AiDto.SearchCondition condition) {
         List<Document> references = searchReferences(message, condition);
-        String context = references.isEmpty()
-                ? "No relevant documents found."
-                : references.stream()
-                .map(Document::getText)
-                .filter(Objects::nonNull)
+        log.debug("ai.chat.retrieve question='{}', retrievedCount={}", message, references.size());
+        for (Document reference : references) {
+            log.debug("ai.chat.retrieve retrieved={}", reference.getMetadata().get("movieId"));
+        }
+
+        if(references.isEmpty()) {
+            return null;
+        }
+
+        // 프론트엔드에서 링크로 안내하기 위해 ID 첨부
+        String context = references.stream()
+                .map(doc -> {
+                    Object movieId = doc.getMetadata().get("movieId");
+                    String text = doc.getText() == null ? "" : doc.getText();
+                    return "ID: " + String.valueOf(movieId) + "\n" + text;
+                })
                 .collect(Collectors.joining("\n\n---\n\n"));
 
         Prompt prompt = new Prompt(List.of(
-                new SystemMessage("You are a movie recommendation assistant. Use references first and answer concisely."),
+                new SystemMessage("""
+                        You are a movie recommendation assistant. Use references first and answer concisely. You are viewing materials retrieved through RAG. Do not mention that your response is based on or retrieved from any references.
+                        If you found fewer references than requested, you must briefly mention that available references were limited and recommendations are based only on the retrieved items.
+                        Before listing movies, briefly explain the recommendation criteria in 1-2 sentences.
+                        
+                        For each recommendation, you must include ID and follow this exact bullet format:
+                        - [ID] Movie Title: short reason
+                        After the list, add one short closing sentence offering to find more options if needed.
+
+                        Example:
+                        추천 기준은 첩보/재난/팀플레이 중심의 액션성과 긴장감입니다. 분위기와 전개 템포가 유사한 작품 위주로 골랐습니다.
+                        
+                        - [ID] Phantom: 1930년대 조선의 첩보 스릴러로, 음모와 반전이 중심인 긴장감 있는 액션.
+                        - [ID] Ashfall: 화산 분출으로 벌어지는 대규모 재난 속 구조 액션과 서스펜스.
+                        
+                        다음에는 어떤 영화를 소개해드릴까요?
+                        """),
                 new UserMessage("Question:\n" + message + "\n\nReferences:\n" + context)
         ));
 
@@ -173,8 +211,7 @@ public class AiChatService {
             return "";
         }
 
-        String text = response.getResult().getOutput().getText();
-        return text == null ? "" : text;
+        return response.getResult().getOutput().getText();
     }
 
     /**
@@ -187,7 +224,8 @@ public class AiChatService {
     private List<Document> searchReferences(String query, AiDto.SearchCondition condition) {
         SearchRequest.Builder builder = SearchRequest.builder()
                 .query(query)
-                .topK(resolveTopK(condition));
+                .topK(resolveTopK(condition))
+                .similarityThreshold(0.2);
 
         Filter.Expression filterExpression = toFilterExpression(condition);
         if (filterExpression != null) {

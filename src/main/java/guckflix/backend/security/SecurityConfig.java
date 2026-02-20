@@ -52,6 +52,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.PATCH, "/actors/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/actors/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/ai/embed/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/ai/embed/**").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/ai/embed/**").hasRole("ADMIN")
                 .anyRequest().permitAll());
 
         http.httpBasic(AbstractHttpConfigurer::disable);
