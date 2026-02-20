@@ -5,6 +5,24 @@ server:
       timeout: 1800
       # 기본 단위는 초이고, 단위가 '60'초이기 때문에 130처럼 2분 10초로 설정하는 경우, session.getMaxInactiveInterval() = 120으로 절사되어 나옴.
 spring:
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
+      chat:
+        options:
+          model: ${OPENAI_CHAT_MODEL:gpt-5-nano}
+          temperature: 1
+      embedding:
+        options:
+          model: ${OPENAI_EMBEDDING_MODEL:text-embedding-3-small}
+    vectorstore:
+      qdrant:
+        host: ${QDRANT_HOST}
+        port: ${QDRANT_PORT}
+        api-key: ${QDRANT_API_KEY}
+        collection-name: ${QDRANT_COLLECTION_NAME:movie}
+        use-tls: ${QDRANT_USE_TLS:false}
+        initialize-schema: ${QDRANT_INITIALIZE_SCHEMA:true}
   cache:
     type: redis
     redis : cache-null-values=true
@@ -25,7 +43,7 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
-        default_batch_fetch_size: 40
+        default_batch_fetch_size: 100
         # 100으로 하면 limit=20인 쿼리가 12/8로 나뉘어서 나간다. 1~10, 12, 25, 50, 100중 12와 8로 처리하기 때문
         # https://velog.io/@joonghyun/SpringBoot-JPA-JPA-Batch-Size%EC%97%90-%EB%8C%80%ED%95%9C-%EA%B3%A0%EC%B0%B0
         # https://www.inflearn.com/community/questions/34469/default-batch-fetch-size-%EA%B4%80%EB%A0%A8%EC%A7%88%EB%AC%B8

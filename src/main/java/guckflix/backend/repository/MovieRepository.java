@@ -54,13 +54,20 @@ public class MovieRepository implements CommonRepository<Movie, Long> {
     }
 
     public Paging<Movie> findPopular(PagingRequest pagingRequest) {
-        List<Movie> list = em.createQuery("select m from Movie m order by m.popularity desc", Movie.class)
+        List<Movie> list = em.createQuery("select m from Movie m order by m.popularity desc, m.id asc", Movie.class)
                 .setFirstResult(pagingRequest.getOffset()) // offset
                 .setMaxResults(pagingRequest.getLimit())
                 .getResultList();
         int totalCount = selectCountAll().intValue();
         int totalPage = getTotalPage(totalCount, pagingRequest.getLimit());
         return new Paging(pagingRequest.getRequestPage(), list, totalCount, totalPage, pagingRequest.getLimit());
+    }
+
+    public List<Movie> findPopular(int offset, int limit) {
+        return em.createQuery("select m from Movie m order by m.popularity desc, m.id asc", Movie.class)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
     }
 
     /**

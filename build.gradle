@@ -10,6 +10,7 @@ sourceCompatibility = '17'
 
 ext {
     queryDslVersion = '5.0.0'
+    springAiVersion = '1.1.1'
 }
 
 configurations {
@@ -27,6 +28,8 @@ repositories {
 }
 
 dependencies {
+    implementation platform("org.springframework.ai:spring-ai-bom:${springAiVersion}")
+
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
@@ -56,6 +59,8 @@ dependencies {
 
     testImplementation 'com.jayway.jsonpath:json-path:2.6.0'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.ai:spring-ai-starter-model-openai'
+    implementation 'org.springframework.ai:spring-ai-starter-vector-store-qdrant'
 }
 
 tasks.withType(JavaCompile).configureEach {
