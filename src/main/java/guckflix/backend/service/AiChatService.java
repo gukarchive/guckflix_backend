@@ -39,24 +39,10 @@ public class AiChatService {
     private static final int INDEX_PAGE_SIZE = 200;
 
     private final ChatModel chatModel;
-    private final EmbeddingModel embeddingModel;
     private final VectorStore vectorStore;
     private final MovieRepository movieRepository;
     private final ObjectMapper objectMapper;
     private final FilterExpressionTextParser filterExpressionTextParser = new FilterExpressionTextParser();
-
-    /**
-     * 텍스트를 임베딩 벡터로 변환한다.
-     *
-     * @param text 임베딩할 텍스트
-     * @return 임베딩 벡터. 입력이 비어 있으면 길이 0 배열
-     */
-    public float[] embed(String text) {
-        if (text == null || text.isBlank()) {
-            return new float[0];
-        }
-        return embeddingModel.embed(text);
-    }
 
     /**
      * 인기 영화 전체 페이지를 순회하며 벡터 문서를 저장한다.
@@ -90,6 +76,17 @@ public class AiChatService {
         }
 
         return totalIndexed;
+    }
+
+    @Transactional(readOnly = true)
+    public void upsertEmbeddedMovie(Long movieId) {
+
+        Movie movie = movieRepository.findById(movieId);
+
+        // upsert 구현
+        vectorStore.delete("movieId == " + movieId);
+        vectorStore.add(List.of(toMovieDocument(movie)));
+        log.debug("ai.embed.upsert movieId={}", movieId);
     }
 
     public void deleteEmbeddedMovie(Long movieId) {

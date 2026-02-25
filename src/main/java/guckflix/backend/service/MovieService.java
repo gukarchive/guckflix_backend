@@ -9,9 +9,12 @@ import guckflix.backend.dto.paging.PagingRequest;
 import guckflix.backend.dto.paging.Paging;
 import guckflix.backend.dto.paging.Slice;
 import guckflix.backend.entity.*;
+import guckflix.backend.event.MovieServiceEventListner.MovieDeletedEvent;
+import guckflix.backend.event.MovieServiceEventListner.MovieSavedOrUpdatedEvent;
 import guckflix.backend.exception.NotFoundException;
 import guckflix.backend.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +33,7 @@ public class MovieService {
     private final ActorRepository actorRepository;
     private final GenreRepository genreRepository;
 
-    private final MovieGenreRepository movieGenreRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     public Response findById(Long id){
         Movie findMovie = movieRepository.findById(id);
@@ -82,7 +85,9 @@ public class MovieService {
         List<Actor> actors = actorRepository.findAllByIds(ids);
         createCredit(post.getCredits(), actors, movie);
 
-        return movieRepository.save(movie);
+        Long movieId = movieRepository.save(movie);
+        eventPublisher.publishEvent(new MovieSavedOrUpdatedEvent(movieId));
+        return movieId;
     }
 
     private List<Credit> createCredit(List<CreditDto.Post> creditDtos, List<Actor> actors, Movie movie) {
@@ -187,8 +192,10 @@ public class MovieService {
 
         // Credit 수정
         for (Credit credit : credits){
-            movie.updateCredit(credit); // Movie <-> Credit ?臾먭컩???怨??온????쇱젟
+            movie.updateCredit(credit); // Movie <-> Credit
         }
+
+        eventPublisher.publishEvent(new MovieSavedOrUpdatedEvent(movieId));
     }
 
     @Transactional
@@ -203,6 +210,7 @@ public class MovieService {
 
         // 영화 삭제
         movieRepository.remove(movie);
+        eventPublisher.publishEvent(new MovieDeletedEvent(movieId));
 
     }
 
