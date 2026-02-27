@@ -12,7 +12,7 @@
 
     <!-- SizeAndTimeBasedRollingPolicy : 시간 설정, 용량 설정에 따라 파일을 나누어 작성하는 Appender -->
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <!-- 로그를 저장할 파일 -->77
+        <!-- 로그를 저장할 파일 -->
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
             <!-- 하루 동안의 log를 남김 -->
             <fileNamePattern>${LOG_DIRECTORY}/logFile_%d{yyyy-MM-dd}_%i.log</fileNamePattern>
@@ -21,7 +21,7 @@
             <totalSizeCap>3GB</totalSizeCap> <!-- 총 저장용량 설정 -->
         </rollingPolicy>
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %5level %logger - %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %5level [%X{request_id}] %logger - %msg%n</pattern>
         </encoder>
     </appender>
 
@@ -39,7 +39,7 @@
             <onMismatch>DENY</onMismatch>
         </filter>
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %5level %logger - %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %5level [%X{request_id}] %logger - %msg%n</pattern>
         </encoder>
     </appender>
 
@@ -57,7 +57,7 @@
             <onMismatch>DENY</onMismatch>
         </filter>
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %5level %logger - %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %5level [%X{request_id}] %logger - %msg%n</pattern>
         </encoder>
     </appender>
 
