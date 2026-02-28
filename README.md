@@ -1,4 +1,7 @@
 
+<img width="1495" height="2147" alt="www guckflix site_ (1)" src="https://github.com/user-attachments/assets/9423da74-93b6-4c96-ae66-5c1ad47d32d0" />
+<br><br>
+
 **포트폴리오 국플릭스 웹사이트**
 - **https://www.guckflix.site/**
   
@@ -20,9 +23,13 @@
   
 **주요 기능**
 
+<br>
+<img width="4000" height="2250" alt="portfolio-collage-16x9-4000-preserve-ratio-labeled" src="https://github.com/user-attachments/assets/ee4c73c7-b3da-42a3-9e7c-8b974c3cf5c0" />
+<br>
+<br>
 아래는 노션 링크 또는 작성한 자바 파일 링크입니다.
 노션 링크로 글이 자동으로 열리지 않으면 새로고침 부탁드립니다.
-<br>
+<br><br>
 
 - 영화, 배우, 출연정보 CRUD, 페이징, 검색 기능 제공
 - [Vector DB(Qdrant) 기반 의미 검색과 Spring AI 기반 RAG 영화 추천 챗봇 기능](https://gukarchive1994.notion.site/Vector-DB-Qdrant-Spring-AI-RAG-3146248714fb806a94f7c57fb69f2ae6)
