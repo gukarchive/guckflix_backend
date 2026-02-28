@@ -2,6 +2,7 @@ package guckflix.backend.repository;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import guckflix.backend.config.SnakeToCamelCaseUtil;
@@ -123,6 +124,8 @@ public class MovieRepository implements CommonRepository<Movie, Long> {
             genreCond.andNot(movieGenre.eq(entitiesMovieGenre));
         }
 
+        NumberExpression<Long> matchedGenreCount = movieGenre.genre.id.countDistinct();
+
         //
         List<Movie> list = queryFactory.selectDistinct(movie)
                 .from(movie)
@@ -130,7 +133,11 @@ public class MovieRepository implements CommonRepository<Movie, Long> {
                 .where(genreCond)
                 .offset(pagingRequest.getOffset())
                 .limit(pagingRequest.getLimit())
-                .orderBy(movie.popularity.desc())
+                .groupBy(movie.id)
+                .orderBy(
+                        matchedGenreCount.desc(),
+                        movie.popularity.desc()
+                )
                 .fetch();
 
         // 프록시 객체 초기화
@@ -139,10 +146,8 @@ public class MovieRepository implements CommonRepository<Movie, Long> {
                 movieGenre.getId();
             }
         }
-
-        int totalCount = selectCountAll().intValue();
-        int totalPage = getTotalPage(totalCount, pagingRequest.getLimit());
-        return new Paging(pagingRequest.getRequestPage(), list, totalCount, totalPage, pagingRequest.getLimit());
+        // totalCount, totalPage 알 필요가 없음.
+        return new Paging(pagingRequest.getRequestPage(), list, -1, -1, pagingRequest.getLimit());
 
     }
 
