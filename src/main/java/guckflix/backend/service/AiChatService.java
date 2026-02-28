@@ -84,7 +84,7 @@ public class AiChatService {
         Movie movie = movieRepository.findById(movieId);
 
         // upsert 구현
-        vectorStore.delete("movieId == " + movieId);
+        vectorStore.delete("movieId == " + "'" +movieId + "'");
         vectorStore.add(List.of(toMovieDocument(movie)));
         log.debug("ai.embed.upsert movieId={}", movieId);
     }
@@ -94,7 +94,7 @@ public class AiChatService {
             throw new IllegalArgumentException("movieId must be a positive number.");
         }
 
-        vectorStore.delete("movieId == " + movieId);
+        vectorStore.delete("movieId == " + "'" +movieId + "'");
         log.debug("ai.embed.delete movieId={}", movieId);
     }
 
@@ -186,6 +186,7 @@ public class AiChatService {
                 new SystemMessage("""
                         You are a movie recommendation assistant. Use references first and answer concisely. You are viewing materials retrieved through RAG. Do not mention that your response is based on or retrieved from any references.
                         If you found fewer references than requested, you must briefly mention that available references were limited and recommendations are based only on the retrieved items.
+                        Never provide more information than this reference.
                         Before listing movies, briefly explain the recommendation criteria in 1-2 sentences.
                         
                         For each recommendation, you must include ID and follow this exact bullet format:
