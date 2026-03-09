@@ -34,7 +34,6 @@ jobs:
       ## deploy to production
       - name: Deploy to prod
         if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
-        working-directory: ${{ secrets.DEPLOY_DIR }}
         run: |
-          docker compose pull backend
-          docker compose up -d backend nginx
+          docker compose -f "${{ secrets.DEPLOY_DIR }}\\docker-compose.yml" pull backend
+          docker compose -f "${{ secrets.DEPLOY_DIR }}\\docker-compose.yml" up -d backend nginx
