@@ -127,7 +127,7 @@ public class MovieController {
                                                 @AuthenticationPrincipal PrincipalDetails user,
                                                 @ModelAttribute Post dto) {
         dto.setMovieId(movieId);
-        dto.setUserId(user.getMember().getId());
+        dto.setUserId(user.getId());
         Long findId = reviewService.save(dto);
         return ResponseEntity.ok().body(reviewService.findById(findId));
     }
@@ -136,7 +136,7 @@ public class MovieController {
     public ResponseEntity<String> reviewsDelete(@PathVariable("movieId") Long movieId,
                                                 @AuthenticationPrincipal PrincipalDetails user,
                                                 @PathVariable("reviewId") Long reviewId) {
-        reviewService.delete(reviewId, movieId, user.getMember().getId());
+        reviewService.delete(reviewId, movieId, user.getId());
         return ResponseEntity.ok().body("DELETED");
     }
 

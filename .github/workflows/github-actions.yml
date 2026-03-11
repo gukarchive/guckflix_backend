@@ -31,9 +31,8 @@ jobs:
           docker build -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/guckflix_api .
           docker push ${{ secrets.DOCKER_USERNAME }}/guckflix_api
 
-      ## deploy to production
+      # deploy to production
       - name: Deploy to prod
         if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
         run: |
-          docker compose -f "${{ secrets.DEPLOY_DIR }}\\docker-compose.yml" pull backend
-          docker compose -f "${{ secrets.DEPLOY_DIR }}\\docker-compose.yml" up -d backend nginx
+          powershell -ExecutionPolicy Bypass -File "${{ secrets.DEPLOY_DIR }}\\deploy.ps1"

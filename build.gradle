@@ -59,6 +59,7 @@ dependencies {
 
     testImplementation 'com.jayway.jsonpath:json-path:2.6.0'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.springframework.session:spring-session-data-redis'
     implementation 'org.springframework.ai:spring-ai-starter-model-openai'
     implementation 'org.springframework.ai:spring-ai-starter-vector-store-qdrant'
 }
