@@ -48,6 +48,7 @@
 - [RDBMS 트랜잭션 이후 @TransactionalEventListener 활용 → Vector DB(Qdrant)와 정합성 유지](https://www.notion.so/gukarchive1994/Vector-DB-Qdrant-Spring-AI-RAG-3146248714fb806a94f7c57fb69f2ae6?source=copy_link#3146248714fb817393e9cadf4d85a396)
 - React router의 권한 기반 라우트와 Spring Security를 통한 프론트-백엔드의 일관적인 권한 검증
 - CORS 설정을 위한 프론트-백엔드 배포 환경 도메인 작업
+- [Spring Session Redis를 통한 세션 공유 및 무중단 배포](https://gukarchive1994.notion.site/Spring-Session-Redis-3206248714fb80c99e49f2ab81134ad0)
 
 기타
 - [빈 라이프사이클 이해](https://gukarchive1994.notion.site/1e8014017e4c4b8d82604d1dbbc47aea?v=086b8d29b8334e88b3bfe61a9b20084d&p=1376248714fb80799e63e0e5507ae1b9&pm=s)
