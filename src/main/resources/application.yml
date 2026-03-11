@@ -59,6 +59,10 @@ spring:
             scope:
               - email
               - profile
+  session:
+    store-type: redis
+    redis:
+      namespace: session
 # 스웨거 Spring boot 2.6.2버전 이후 sping.mvc.pathmatch.matching-strategy의 값이
 # ant_path_matcher -> path_pattern_parser로 변경되어 오류 발생 가능함
   mvc:

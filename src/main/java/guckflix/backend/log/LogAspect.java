@@ -73,7 +73,7 @@ public class LogAspect {
         if(authentication.getPrincipal() == "anonymousUser") {
             userInfo.append("anonymous");
         } else {
-            Member member = ((PrincipalDetails) authentication.getPrincipal()).getMember();
+            PrincipalDetails member = ((PrincipalDetails) authentication.getPrincipal());
             String username = member.getUsername();
             String userRole = member.getRole().toString();
             userInfo.append(username).append(" ").append(userRole);

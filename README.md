@@ -1,12 +1,16 @@
 
+<img width="1495" height="2147" alt="www guckflix site_ (1)" src="https://github.com/user-attachments/assets/9423da74-93b6-4c96-ae66-5c1ad47d32d0" />
+<br><br>
+
 **포트폴리오 국플릭스 웹사이트**
-- **https://gukarchive.github.io/**
+- **https://www.guckflix.site/**
+  
 <br>
 
 **관련 링크**
 - [개발 흐름 및 학습 과정을 정리한 개인 노션](https://gukarchive1994.notion.site/1e8014017e4c4b8d82604d1dbbc47aea?v=086b8d29b8334e88b3bfe61a9b20084d)
-- 백엔드 깃허브 : https://github.com/gukarchive/guckflix_backend
-- 프론트엔드 깃허브 : https://github.com/gukarchive/guckflix_frontend
+- [백엔드 깃허브](https://github.com/gukarchive/guckflix_backend)
+- [프론트엔드 깃허브](https://github.com/gukarchive/guckflix_frontend)
 - [API 호출 주소 예시](https://api.guckflix.site/movies/popular?page=1)
 <br>
 
@@ -14,48 +18,44 @@
 
 - 넷플릭스를 모방한 영화 소개 어플리케이션
 - tmdb api를 통해 약 2000건의 영화 엔티티를 크롤링하여 더미로 구축
-- 크롤링, 백엔드, 프론트엔드, AWS 설정 모두 1인 개발
+- 크롤링, 백엔드, 프론트엔드, AWS 설정 포함 1인 개발
 <br>
   
 **주요 기능**
-  
-- 영화 CRUD, 페이징, 슬라이스
-- 배우 CRUD
-- 출연작 CRUD
-- 유튜브 트레일러 및 영화, 배우, 사진 제공
-- 영화 제목 검색 기능
-- 일반 로그인 및 OAUTH2 로그인 지원
-<br>
 
-**프로젝트 주요 특징 및 적용점 포스팅**
+<br>
+<img width="4000" height="2250" alt="portfolio-collage-16x9-4000-preserve-ratio-labeled" src="https://github.com/user-attachments/assets/ee4c73c7-b3da-42a3-9e7c-8b974c3cf5c0" />
+<br>
 <br>
 아래는 노션 링크 또는 작성한 자바 파일 링크입니다.
 노션 링크로 글이 자동으로 열리지 않으면 새로고침 부탁드립니다.
+<br><br>
+
+- 영화, 배우, 출연정보 CRUD, 페이징, 검색 기능 제공
+- [Vector DB(Qdrant) 기반 의미 검색과 Spring AI 기반 RAG 영화 추천 챗봇 기능](https://gukarchive1994.notion.site/Vector-DB-Qdrant-Spring-AI-RAG-3146248714fb806a94f7c57fb69f2ae6)
+- 일반 로그인 및 OAuth2 로그인 지원, 인증 후 원래 요청 페이지로 리다이렉트 [[1]](https://gukarchive1994.notion.site/Spring-Security-OAuth2-Client-1496248714fb8064b260ee3c005b9786) [[2]](https://gukarchive1994.notion.site/Spring-Security-OAuth2-Client-1516248714fb807bbbb5f633ca7a5997)
+- logback 기반 레벨 별 로그 파일 생성 및 AOP 기반 Slack 알림 연동 [[1]](https://gukarchive1994.notion.site/logback-logback-1296248714fb80deb137fde9d39803a4) [[2]](https://gukarchive1994.notion.site/AOP-Slack-Slack-1296248714fb80c2ba68e608c160ccdc)
+- [GitHub Actions + Docker Compose 기반 CI/CD 자동화 파이프라인 구축](https://github.com/gukarchive/guckflix_backend/blob/master/.github/workflows/github-actions.yml)
 <br>
 
-- [304 응답코드를 활용한 이미지 캐싱](https://github.com/gukarchive/guckflix_backend/blob/master/src/main/java/guckflix/backend/controller/ImageController.java)
-- [인기 API 캐싱](https://github.com/gukarchive/guckflix_backend/blob/master/src/main/java/guckflix/backend/config/RedisConfig.java)
-- [DTO 체계화](https://gukarchive1994.notion.site/1e8014017e4c4b8d82604d1dbbc47aea?v=086b8d29b8334e88b3bfe61a9b20084d&p=1356248714fb8014b1a7fa21cb6de302&pm=s)
+**프로젝트 세부 구현**
+- [빈번한 API 호출에 Spring Cache (TTL 3m) 도입 → 응답 속도 단축](https://github.com/gukarchive/guckflix_backend/blob/master/src/main/java/guckflix/backend/config/RedisConfig.java)
+- [이미지 요청에 대해 ETag/304(Not Modified) 처리로 브라우저 캐싱 이미지 사용 유도](https://github.com/gukarchive/guckflix_backend/blob/master/src/main/java/guckflix/backend/controller/ImageController.java)
+- [커스텀 ArgumentResolver 작성으로 정렬/방향/검색 조건 표준화 및 기본값 제공](https://gukarchive1994.notion.site/1e8014017e4c4b8d82604d1dbbc47aea?v=086b8d29b8334e88b3bfe61a9b20084d&p=1356248714fb809f8796e4ba43f11187&pm=s)
+- [특정 날짜 검증 처리를 위한 커스텀 Bean Validator 작성](https://gukarchive1994.notion.site/1e8014017e4c4b8d82604d1dbbc47aea?v=086b8d29b8334e88b3bfe61a9b20084d&p=1346248714fb80c1917ccfb00ccf8223&pm=s)
+- [@ExceptionHandler 기반 전역 예외 처리](https://github.com/gukarchive/guckflix_backend/blob/master/src/main/java/guckflix/backend/exception/ApiExceptionHandler.java)
+- [nested class를 통한 요청별 DTO 관리](https://gukarchive1994.notion.site/1e8014017e4c4b8d82604d1dbbc47aea?v=086b8d29b8334e88b3bfe61a9b20084d&p=1356248714fb8014b1a7fa21cb6de302&pm=s)
+- [RDBMS 트랜잭션 이후 @TransactionalEventListener 활용 → Vector DB(Qdrant)와 정합성 유지](https://www.notion.so/gukarchive1994/Vector-DB-Qdrant-Spring-AI-RAG-3146248714fb806a94f7c57fb69f2ae6?source=copy_link#3146248714fb817393e9cadf4d85a396)
+- React router의 권한 기반 라우트와 Spring Security를 통한 프론트-백엔드의 일관적인 권한 검증
+- CORS 설정을 위한 프론트-백엔드 배포 환경 도메인 작업
+
+기타
 - [빈 라이프사이클 이해](https://gukarchive1994.notion.site/1e8014017e4c4b8d82604d1dbbc47aea?v=086b8d29b8334e88b3bfe61a9b20084d&p=1376248714fb80799e63e0e5507ae1b9&pm=s)
 - [빌더 패턴](https://gukarchive1994.notion.site/1e8014017e4c4b8d82604d1dbbc47aea?v=086b8d29b8334e88b3bfe61a9b20084d&p=3458c1ec23e54503adebaf1a00cea9db&pm=s)
-- [커스텀 ArgumentResolver](https://gukarchive1994.notion.site/1e8014017e4c4b8d82604d1dbbc47aea?v=086b8d29b8334e88b3bfe61a9b20084d&p=1356248714fb809f8796e4ba43f11187&pm=s)
-- [AOP 및 로깅](https://gukarchive1994.notion.site/1e8014017e4c4b8d82604d1dbbc47aea?v=086b8d29b8334e88b3bfe61a9b20084d&p=1296248714fb80c2ba68e608c160ccdc&pm=s)
-- [스프링 시큐리티 client 라이브러리 이해 (1)](https://gukarchive1994.notion.site/1e8014017e4c4b8d82604d1dbbc47aea?v=086b8d29b8334e88b3bfe61a9b20084d&p=1496248714fb8064b260ee3c005b9786&pm=s)
-- [스프링 시큐리티 client 라이브러리 이해 (2)](https://gukarchive1994.notion.site/1e8014017e4c4b8d82604d1dbbc47aea?v=086b8d29b8334e88b3bfe61a9b20084d&p=1516248714fb807bbbb5f633ca7a5997&pm=s)
 - [JPA N+1 해결](https://gukarchive1994.notion.site/1e8014017e4c4b8d82604d1dbbc47aea?v=086b8d29b8334e88b3bfe61a9b20084d&p=1776248714fb8050b021f0a95701346f&pm=s)
 - [JPA OSIV 개념](https://gukarchive1994.notion.site/1e8014017e4c4b8d82604d1dbbc47aea?v=086b8d29b8334e88b3bfe61a9b20084d&p=1776248714fb80e7ae4ef9dc20603262&pm=s)
 - [체크 예외 전환](https://gukarchive1994.notion.site/1e8014017e4c4b8d82604d1dbbc47aea?v=086b8d29b8334e88b3bfe61a9b20084d&p=1346248714fb80bc9466f0c502444fd1&pm=s)
-- [전역적 예외 관리](https://github.com/gukarchive/guckflix_backend/blob/master/src/main/java/guckflix/backend/exception/ApiExceptionHandler.java)
-- [검증기와 날짜 커스텀 검증기](https://gukarchive1994.notion.site/1e8014017e4c4b8d82604d1dbbc47aea?v=086b8d29b8334e88b3bfe61a9b20084d&p=1346248714fb80c1917ccfb00ccf8223&pm=s)
 - [정적 팩토리 메서드](https://gukarchive1994.notion.site/1e8014017e4c4b8d82604d1dbbc47aea?v=086b8d29b8334e88b3bfe61a9b20084d&p=2b06248714fb800fa661cfa6da6b2cc9&pm=s)
-- [자동 CI/CD](https://github.com/gukarchive/guckflix_backend/blob/master/.github/workflows/github-actions.yml)
-<br>
-
-**프로젝트 외적으로 학습중인 사항**
-<br>
-노션에 지속적으로 학습한 것을 정리하고 있습니다.
-<br>
-
 - [추상화, 다형성, 상속, 캡슐화](https://gukarchive1994.notion.site/1e8014017e4c4b8d82604d1dbbc47aea?v=086b8d29b8334e88b3bfe61a9b20084d&p=2b26248714fb8071a645c87cdb6d584b&pm=s)
 - [스프링 레거시 프로젝트(1) - JSP, 서블릿, JSTL, EL](https://gukarchive1994.notion.site/1e8014017e4c4b8d82604d1dbbc47aea?v=086b8d29b8334e88b3bfe61a9b20084d&p=2b46248714fb80e486c4c7db070c801b&pm=s)
 - [스프링 레거시 프로젝트(2) - web.xml, RootApplicationContext, WebApplicationContext](https://gukarchive1994.notion.site/1e8014017e4c4b8d82604d1dbbc47aea?v=086b8d29b8334e88b3bfe61a9b20084d&p=2b56248714fb80039e24f3aa1381f7e0&pm=s)
@@ -67,28 +67,7 @@
 
 **프로젝트 활용 기술 스택**
 
-1. 백엔드 개발 환경
-- 자바 11.0.28
-- 스프링부트 2.7.6
-- 스프링 시큐리티 5.75 (로그인, OAUTH2, 권한 관리)
-<br>
-
-2. DB 통신 관련 
-- 메인 DB MYSQL 8
-- 테스트용 DB H2
-- 스프링 Data JPA (ORM)
-- 스프링 캐시 + Redis (자주 호출되는 API 캐싱)
-<br>
-
-3. 프론트엔드
-- React
-- Redux (전역 상태 관리)
-<br>
-
-4. 환경 및 CI/CD
-- git CLI
-- github action (자동 CI/CD)
-- 도커 컴포즈
-- AWS EC2
-- AWS 로드밸런서
-
+- 스프링부트 3.5.10, 스프링 시큐리티 5.75, 스프링 AI 1.1.1, 스프링 Data JPA
+- MYSQL 8, H2, Redis, Qdrant
+- React, ReduxCD
+- git, docker, AWS EC2, route53, LB
