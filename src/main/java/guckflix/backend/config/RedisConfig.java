@@ -5,7 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.BasicPolymorphicTypeValidator;
 import com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import guckflix.backend.security.authen.PrincipalDetails;
+import guckflix.backend.security.authen.PrincipalDetailsMixin;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.BeanClassLoaderAware;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -21,6 +24,7 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.security.jackson2.SecurityJackson2Modules;
 
 import java.time.Duration;
 
@@ -53,6 +57,17 @@ public class RedisConfig {
         redisTemplate.setValueSerializer(new StringRedisSerializer());
         redisTemplate.setConnectionFactory(redisConnectionFactory());
         return redisTemplate;
+    }
+
+    // 스프링 세션을 직렬화할 때 사용
+    @Bean
+    public GenericJackson2JsonRedisSerializer springSessionDefaultRedisSerializer() {
+        ClassLoader loader = this.getClass().getClassLoader();
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModules(SecurityJackson2Modules.getModules(loader));
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.addMixIn(PrincipalDetails.class, PrincipalDetailsMixin.class);
+        return new GenericJackson2JsonRedisSerializer(objectMapper);
     }
 
     @Bean
