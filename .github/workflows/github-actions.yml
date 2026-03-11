@@ -5,7 +5,9 @@ name: CI/CD using github actions & docker
 on:
   push:
     branches: [ "master", "main" ]
-    
+    paths-ignore:
+      - 'README.md'
+      - 'docs/**'
 jobs:
   CI-CD:
     runs-on: [self-hosted, Windows, X64]
